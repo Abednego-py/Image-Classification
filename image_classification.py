@@ -1,8 +1,11 @@
 import keras
 from PIL import Image, ImageOps
 import numpy as np
+import matplotlib.pyplot as plt
+import streamlit as st
 
 
+class_names = ['aeroplane', 'car', 'bird']
 
 def teachable_machine_classification(img, model):
     # Load the model
@@ -17,13 +20,15 @@ def teachable_machine_classification(img, model):
 
     #turn the image into a numpy array
     image_array = np.asarray(image)
+
     # Normalize the image
-    normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
+    normalized_image_array = image_array.astype(np.float32) / 255
 
     # Load the image into the array
     data[0] = normalized_image_array
 
     # run the inference
-    prediction = model.predict(data)
-    return prediction
+    pred = model.predict(data)
+    # col = 'green' if np.argmax(y[i])==np.argmax(pred[i]) else 'red'
+    return np.argmax(pred[0])
     # return np.argmax(prediction) # return position of the highest probability
